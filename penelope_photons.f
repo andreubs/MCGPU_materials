@@ -1,9 +1,9 @@
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C  penelope_abridged.f                                                  C
-C  Photon-physics subset of PENELOPE 2006 for MCGPU_material_generator. C
-C  Contains only the subroutines needed for Rayleigh, Compton,          C
-C  photoelectric and pair-production MFP table generation.              C
-C
+C  penelope_photons.f                                                  C
+C  Photon-physics subset of PENELOPE 2006 to generate MCGPU materials. C
+C  Contains only the subroutines from penelope.f needed for Rayleigh,  C
+C  Compton, photoelectric and pair-production MFP table generation.    C
+C                                                                      C
 C    EGRID ------------------> PENELOPE log energy grid (50 eV – 1 GeV, 200 pts)
 C    PHMFP ------------------> Photon mean free path (Rayleigh/Compton/Photo/Pair)
 C    GRAaI, GRAaT, GRAaD, GRAaD1 --> Rayleigh cross section + RITA grid
@@ -13,10 +13,24 @@ C    GPPa0 ------------------> Initialise pair-production sampling parameters
 C    BLOCK DATA PENDAT ------> Hardcoded element data: ATW, EPX, RA1–RA5, RSCR, ETA
 C   SPLINE, FINDI  ----------> Spline fit and binary search
 C    SUMGA, RITAI0, SIMPSU --> Numerical integration (Gaussian, RITA, Simpson)  
-C                                                                       C
-C  PENELOPE/PENGEOM (version 2006). Functions extracted from penelope.f C
-C  Copyright (c) 2001-2006 Universitat de Barcelona                     C
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C                                                                      C
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C                                                                      C
+C  PENELOPE/PENGEOM (version 2006)                                     C
+C  Copyright (c) 2001-2006                                             C
+C  Universitat de Barcelona                                            C
+C                                                                      C
+C  Permission to use, copy, modify, distribute and sell this software  C
+C  and its documentation for any purpose is hereby granted without     C
+C  fee, provided that the above copyright notice appears in all        C
+C  copies and that both that copyright notice and this permission      C
+C  notice appear in all supporting documentation. The Universitat de   C
+C  Barcelona makes no representations about the suitability of this    C
+C  software for any purpose. It is provided "as is" without express    C
+C  or implied warranty.                                                C
+C                                                                      C
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
 
 C  *********************************************************************
 C                       SUBROUTINE EGRID
