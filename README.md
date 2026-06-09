@@ -2,10 +2,11 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/andreubs/MCGPU_materials/HEAD?labpath=create_MCGPU_material.ipynb)
 
-Generate `.mcgpu` material files for the **MC-GPU** GPU-accelerated Monte Carlo
-X-ray transport code (v1.3, VICTRE_MCGPU, MCGPU-PET) without a local PENELOPE
-installation. A single interactive Fortran program replaces the original two-step
-workflow (`material.f` -> `.mat` -> `MC-GPU_create_material_data.f`).
+Simple utility to generate `.mcgpu` material files for the **MC-GPU** GPU-accelerated 
+Monte Carlo X-ray transport code without a local PENELOPE 2006 installation 
+(material files compatible with versions v1.3, VICTRE_MCGPU, MCGPU-PET). 
+A single interactive Fortran program replaces the original two-step
+workflow (`material.f` -> `.mat` -> `MC-GPU_create_material_data.f` -> `.mcgpu`).
 
 ---
 
@@ -46,6 +47,10 @@ or non-interactively with a redirect file:
 
 ### Interactive prompts (in order)
 
+The program asks the user for the information required to define the materials.
+These questions where originally requested by PENELOPE's `material.f` and
+MC-GPU's `MC-GPU_create_material_data.f` (see their documentation for reference):
+
 1. **Mode**: `1` keyboard entry, `2` look up by ID from `PENDBASE_photons/pdcompos.p06`
    (IDs 1-99 = elements, 100-280 = compounds)
 
@@ -68,6 +73,8 @@ or non-interactively with a redirect file:
 6. **Output filename** (e.g. `water_5-120keV.mcgpu`)
 
 ### Example input file (liquid water, 5-120 keV)
+
+The following text file can be redirected to the executable stdin instead of manually typing the information:
 
 ```
 1
@@ -187,10 +194,10 @@ Cross sections come from the PENELOPE 2006 library via `penelope_photons.f`, a
 | Rayleigh | Analytical Balyuzi form factors (hardcoded in BLOCK DATA PENDAT) |
 | Compton | Relativistic impulse approximation with one-electron profiles from pdatconf.p06 |
 | Photoelectric | Tabulated cross sections from pdgph##.p06 |
-| Pair production | Tabulated cross sections from pdgpp##.p06 (attenuation only; no e+/e- generated) |
+| Pair production | Tabulated cross sections from pdgpp##.p06. For energies above MeV, the pair production attenuation is added to the total mean free path, but no e+/e- are generated. |
 
 Known limitations:
-- Fluorescence not included (MC-GPU does not track secondary photons)
+- Photoelectrons and fluorescence not included (MC-GPU does not track secondary particles)
 - Pair production attenuates the beam correctly but generates no secondary particles
 - Single material per file
 
@@ -220,22 +227,12 @@ Expected results (aluminum, two energy ranges):
 | Compton shells (FJ0) | < 0.001% |
 | Integer fields (ITL, ITU, KZCO, KSCO) | exact match |
 
-The Rayleigh MFP difference is a known consequence of different computation paths:
-the reference used PENELOPE spline interpolation on a sparse log-energy grid,
-while the new tool evaluates the cross section directly at each linear energy bin.
-Both are correct within the uncertainty of the Balyuzi form factor model.
-
 ---
 
 ## Binder configuration
 
-The `binder/` folder contains two files required for the Binder launch badge:
-
-- `binder/apt.txt` -- lists `gfortran` as a system dependency
-- `binder/postBuild` -- compiles `MCGPU_materials.x` once at image build time
-
-Without `binder/apt.txt`, gfortran is not available and compilation fails.
-Without `binder/postBuild`, compilation happens on first notebook run (~20 s).
+The `binder/` folder contains files required for the Binder launch badge.
+The files request install of gfortran and other dependencies and compile the code.
 
 ---
 
@@ -257,4 +254,3 @@ Without `binder/postBuild`, compilation happens on first notebook run (~20 s).
 
 ---
 
-*Developed at FDA/CDRH/OSEL/DIDSR. Public domain.*
