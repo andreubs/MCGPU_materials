@@ -1,0 +1,7 @@
+#!/bin/bash
+# Compile MCGPU_materials when Binder builds the environment.
+# This runs once; subsequent session launches reuse the cached image.
+set -e
+gfortran MCGPU_materials.f penelope_photons.f \
+         -o MCGPU_materials.x -O3
+echo "MCGPU_materials compiled successfully."
